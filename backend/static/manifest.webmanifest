@@ -1,0 +1,17 @@
+{
+  "name": "SmartPoli Voice",
+  "short_name": "SP Voice",
+  "description": "Talk to SmartPoli about your medicines and how you feel.",
+  "id": "/voice",
+  "start_url": "/voice",
+  "scope": "/voice",
+  "display": "standalone",
+  "background_color": "#F4F7F6",
+  "theme_color": "#0F8A70",
+  "icons": [
+    { "src": "/static/voice-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/static/voice-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/static/voice-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "/static/voice-icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

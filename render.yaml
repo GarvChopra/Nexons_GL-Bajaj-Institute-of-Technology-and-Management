@@ -1,0 +1,79 @@
+services:
+  - type: web
+    name: smartpoli
+    # Docker instead of Render's native Python runtime: Tesseract OCR needs
+    # the `tesseract-ocr` system binary, and native runtime can only `pip
+    # install` — no way to install a non-Python package. See backend/Dockerfile.
+    # dockerfilePath/dockerContext are resolved relative to rootDir (verified
+    # against a real failed deploy: "backend" + "./backend" doubled into a
+    # nonexistent "backend/backend" — Render's own docs say repo-root-relative,
+    # which is wrong in practice), so both are just "." here.
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    rootDir: backend
+    healthCheckPath: /
+    envVars:
+      # PYTHON_VERSION is a native-runtime setting — not read under Docker,
+      # where backend/Dockerfile's FROM line pins the version instead.
+      - key: SMARTPOLI_JWT_SECRET
+        generateValue: true
+      # sync:false, not a fixed value — this now points at a real Postgres
+      # (Supabase) set manually in the dashboard. A fixed `value` here
+      # would get silently overwritten back to sqlite on the next blueprint
+      # sync.
+      - key: SMARTPOLI_DATABASE_URL
+        sync: false
+      - key: SMARTPOLI_ALLOWED_ORIGINS
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: qwen/qwen3.8-27b
+      - key: TWILIO_ACCOUNT_SID
+        sync: false
+      - key: TWILIO_AUTH_TOKEN
+        sync: false
+      - key: TWILIO_WHATSAPP_NUMBER
+        value: "whatsapp:+14155238886"
+      # This is a shared Twilio sandbox number, not a dedicated WhatsApp
+      # Business number: it silently drops every message from a phone that
+      # hasn't first sent this exact "join <code>" phrase. Not a secret —
+      # it's meant to be handed to anyone who wants to message the bot.
+      - key: SMARTPOLI_WHATSAPP_JOIN_CODE
+        value: "feet-cheese"
+      - key: SMARTPOLI_PUBLIC_BASE_URL
+        sync: false
+      - key: SMARTPOLI_SKIP_TWILIO_SIGNATURE
+        value: "0"
+      # --- reminders / Android (see docs/ANDROID_TWA.md and docs/LAUNCH_REPORT.md) ---
+      # Patient time zone used until a device reports its own.
+      - key: SMARTPOLI_DEFAULT_TZ
+        value: Asia/Kolkata
+      # Web Push keys: python tools/generate_vapid_keys.py, then paste in the dashboard.
+      - key: SMARTPOLI_VAPID_PRIVATE_KEY
+        sync: false
+      - key: SMARTPOLI_VAPID_PUBLIC_KEY
+        sync: false
+      - key: SMARTPOLI_VAPID_SUBJECT
+        sync: false
+      # Shared secret for the external 1-minute cron that calls POST /internal/reminder-sweep.
+      # A free Render instance sleeps when idle, which stops the in-process reminder timer.
+      - key: SMARTPOLI_CRON_SECRET
+        sync: false
+      # Digital Asset Links for the Android app (package id + release-signing SHA-256).
+      - key: SMARTPOLI_ANDROID_PACKAGE
+        sync: false
+      - key: SMARTPOLI_ANDROID_SHA256
+        sync: false
+      # Optional: raises the openFDA limit from 1,000 to 120,000 requests/day.
+      - key: OPENFDA_API_KEY
+        sync: false
+      # Set to 1 to refuse to start with an insecure configuration.
+      - key: SMARTPOLI_REQUIRE_SECURE_CONFIG
+        value: "1"
+      # AI-assisted dose gaps (needs GROQ_API_KEY): "1" on, "0" off.
+      - key: SMARTPOLI_AI_GAPS
+        value: "1"

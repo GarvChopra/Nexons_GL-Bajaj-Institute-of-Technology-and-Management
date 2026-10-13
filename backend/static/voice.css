@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600&display=swap');
+
+/* SmartPoli Voice — a voice interface, not a chat: one calm orb that shows
+   listening / understanding / speaking, the live words, the latest reply, and
+   only the cards that matter right now. Same teal system as the app. */
+:root {
+  --bg: #F4F7F6;
+  --surface: #FFFFFF;
+  --ink: #17231F;
+  --soft: #5E6C67;
+  --faint: #8E9A96;
+  --line: #E2E9E6;
+  --teal: #0F8A70;
+  --teal-dark: #0B6B57;
+  --teal-tint: #E3F4EE;
+  --amber: #B4791F;
+  --amber-tint: #FBEBD3;
+  --red: #D93C30;
+  --red-tint: #FDE7E4;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: 'Noto Sans', 'Noto Sans Devanagari', system-ui, sans-serif; font-size: 16px; line-height: 1.5;
+  -webkit-tap-highlight-color: transparent;
+}
+button, input { font: inherit; color: inherit; }
+svg { fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+
+.vx-app { min-height: 100vh; min-height: 100dvh; max-width: 560px; margin: 0 auto; display: flex; flex-direction: column; }
+
+/* top bar */
+.vx-top { display: flex; align-items: center; justify-content: space-between; padding: max(14px, env(safe-area-inset-top)) 16px 8px; }
+.vx-brand { display: flex; align-items: center; gap: 9px; font-family: 'Figtree', sans-serif; font-weight: 800; font-size: 19px; color: var(--teal-dark); }
+.vx-mark { width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(145deg, #18A083, var(--teal-dark)); color: #fff; display: grid; place-items: center; font-size: 22px; line-height: 1; }
+.vx-controls { display: flex; align-items: center; gap: 8px; }
+.vx-lang { display: flex; background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.vx-lang button { border: 0; background: none; padding: 5px 11px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--soft); cursor: pointer; }
+.vx-lang button[aria-pressed="true"] { background: var(--teal); color: #fff; }
+.vx-icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); display: grid; place-items: center; color: var(--soft); cursor: pointer; text-decoration: none; }
+.vx-icon-btn svg { width: 19px; height: 19px; }
+.vx-icon-btn[aria-pressed="true"] { color: var(--red); }
+
+/* main column: the conversation fills the screen, today's glance sits at the bottom */
+.vx-main { flex: 1; display: flex; flex-direction: column; padding: 4px 16px max(18px, env(safe-area-inset-bottom)); text-align: center; }
+.vx-stage { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px 0 20px; }
+.vx-app.is-talking .vx-stage { justify-content: flex-start; }
+.vx-title { font-family: 'Figtree', 'Noto Sans Devanagari', sans-serif; font-weight: 800; font-size: clamp(26px, 7vw, 34px); letter-spacing: -0.015em; margin: 0 0 6px; }
+.vx-subline { color: var(--soft); margin: 0 0 clamp(20px, 5vh, 40px); }
+.vx-app.is-talking .vx-title { font-size: 22px; }
+.vx-app.is-talking .vx-subline { display: none; }
+
+/* ---- the orb: the page's one visual ---- */
+.vx-orb { position: relative; width: clamp(170px, 30vh, 230px); height: clamp(170px, 30vh, 230px); flex: none; border: 0; padding: 0; background: none; cursor: pointer; border-radius: 50%; }
+.vx-orb:focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 8px; }
+.vx-orb-core {
+  position: absolute; inset: 30px; border-radius: 50%; display: grid; place-items: center;
+  background: radial-gradient(circle at 35% 30%, #2BC49F, var(--teal) 58%, var(--teal-dark));
+  box-shadow: 0 18px 44px -14px rgba(15, 138, 112, 0.65), inset 0 2px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.4s ease, filter 0.4s ease;
+}
+.vx-orb-ring { position: absolute; inset: 18px; border-radius: 50%; border: 2px solid rgba(15, 138, 112, 0.28); opacity: 0; }
+.vx-wave { display: flex; gap: 5px; align-items: center; height: 44px; }
+.vx-wave i { width: 6px; height: 12px; border-radius: 4px; background: rgba(255, 255, 255, 0.92); transition: height 0.3s ease; }
+
+/* listening: slow breathing rings */
+.vx-app[data-state="listening"] .vx-orb-ring { animation: vx-breathe 2.4s ease-out infinite; }
+.vx-app[data-state="listening"] .vx-orb-ring.r2 { animation-delay: 1.2s; }
+.vx-app[data-state="listening"] .vx-wave i { height: 16px; }
+@keyframes vx-breathe { from { transform: scale(0.92); opacity: 0.9; } to { transform: scale(1.3); opacity: 0; } }
+
+/* understanding: a soft ring turns around the orb */
+.vx-app[data-state="thinking"] .vx-orb-ring.r1 {
+  opacity: 1; border: 0; inset: 14px;
+  background: conic-gradient(from 0deg, transparent 0 60%, rgba(15, 138, 112, 0.12) 72%, var(--teal) 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 5px), #000 calc(100% - 4px));
+  animation: vx-spin 1.1s linear infinite;
+}
+.vx-app[data-state="thinking"] .vx-wave i { height: 8px; }
+@keyframes vx-spin { to { transform: rotate(360deg); } }
+
+/* speaking: the bars move with the voice */
+.vx-app[data-state="speaking"] .vx-orb-core { transform: scale(1.04); }
+.vx-app[data-state="speaking"] .vx-wave i { animation: vx-bar 0.9s ease-in-out infinite; height: 34px; }
+.vx-app[data-state="speaking"] .vx-wave i:nth-child(2) { animation-delay: 0.12s; }
+.vx-app[data-state="speaking"] .vx-wave i:nth-child(3) { animation-delay: 0.24s; }
+.vx-app[data-state="speaking"] .vx-wave i:nth-child(4) { animation-delay: 0.36s; }
+.vx-app[data-state="speaking"] .vx-wave i:nth-child(5) { animation-delay: 0.48s; }
+@keyframes vx-bar { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+
+/* paused / not started: still and a little muted */
+.vx-app[data-state="paused"] .vx-orb-core, .vx-app[data-state="idle"] .vx-orb-core { filter: saturate(0.55); }
+
+.vx-status { margin-top: 14px; font-weight: 600; color: var(--soft); min-height: 24px; }
+
+/* words, not bubbles */
+.vx-heard { margin: 18px 0 0; min-height: 24px; max-width: 36ch; color: var(--faint); font-style: italic; }
+.vx-reply {
+  margin: 10px 0 0; max-width: 34ch; font-family: 'Figtree', 'Noto Sans Devanagari', sans-serif;
+  font-size: 19px; line-height: 1.45; font-weight: 600; color: var(--ink);
+}
+.vx-reply[hidden] { display: none; }
+
+.vx-note { margin: 18px 0 0; width: 100%; font-size: 13.5px; color: var(--soft); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 9px 12px; display: flex; gap: 10px; align-items: flex-start; text-align: left; }
+.vx-note[hidden] { display: none; }
+.vx-note button { margin-left: auto; border: 0; background: none; color: var(--teal-dark); font-weight: 600; cursor: pointer; padding: 0; }
+
+/* cards: only what needs the patient's eyes right now */
+.vx-cards { width: 100%; margin-top: 20px; display: flex; flex-direction: column; gap: 10px; text-align: left; }
+.vx-card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; }
+.vx-card h3 { margin: 0 0 4px; font-family: 'Figtree', sans-serif; font-size: 16px; }
+.vx-card p { margin: 0; color: var(--soft); font-size: 14.5px; }
+.vx-card ul { margin: 8px 0 0; padding-left: 18px; color: var(--soft); font-size: 14px; }
+.vx-card-row { display: flex; align-items: center; gap: 12px; }
+.vx-card-row .vx-tick { width: 34px; height: 34px; flex: none; border-radius: 50%; background: var(--teal-tint); color: var(--teal); display: grid; place-items: center; }
+.vx-card-row .vx-tick svg { width: 20px; height: 20px; stroke-width: 2.4; }
+.vx-card-row > div { flex: 1; min-width: 0; }
+.vx-card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.vx-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 7px 14px; font-weight: 600; font-size: 14px; cursor: pointer; color: var(--teal-dark); text-decoration: none; display: inline-block; }
+.vx-btn.is-primary { background: var(--teal); border-color: var(--teal); color: #fff; }
+.vx-btn:disabled { opacity: 0.5; }
+.vx-link { border: 0; background: none; padding: 0; margin-top: 10px; color: var(--soft); text-decoration: underline; cursor: pointer; font-size: 14px; }
+
+.vx-sev { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px; }
+.vx-sev.LOW { background: var(--teal-tint); color: var(--teal-dark); }
+.vx-sev.MODERATE { background: var(--amber-tint); color: var(--amber); }
+.vx-sev.EMERGENCY { background: var(--red); color: #fff; }
+.vx-sev.NOT_ASSESSED { background: #ECEFEE; color: var(--soft); }
+.vx-source { font-size: 12px; color: var(--faint); margin-top: 8px; }
+
+/* levels and help — calm: light cards, a coloured edge, no full-screen alarm */
+.vx-card.vx-level-LOW { border-left: 4px solid var(--teal); }
+.vx-card.vx-level-MODERATE { border-left: 4px solid var(--amber); }
+.vx-card.vx-level-NOT_ASSESSED { border-left: 4px solid var(--faint); }
+.vx-guide { margin-top: 12px; }
+.vx-guide h4 { margin: 0 0 4px; font-size: 13.5px; color: var(--ink); }
+.vx-guide ul { margin: 0; }
+.vx-src { font-size: 12px; color: var(--teal-dark); margin-left: 4px; }
+.vx-small { font-size: 12.5px !important; color: var(--faint) !important; margin-top: 6px !important; }
+.vx-recheck.is-due { border-color: var(--teal); box-shadow: 0 0 0 3px var(--teal-tint); }
+.vx-help { border-left: 4px solid var(--red); }
+.vx-help h3 { color: var(--red); }
+.vx-help p { color: var(--ink); }
+.vx-help-call { display: block; text-align: center; margin-top: 12px; background: var(--red); color: #fff; font-weight: 700;
+  font-size: 18px; padding: 14px; border-radius: 14px; text-decoration: none; }
+.vx-help-call:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+
+/* the one tap browsers require before the mic and speech can start — right under the orb */
+.vx-start { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 22px; }
+.vx-start[hidden] { display: none; }
+.vx-start-btn { border: 0; border-radius: 999px; padding: 16px 34px; background: var(--teal); color: #fff; font-family: 'Figtree', sans-serif;
+  font-weight: 700; font-size: 18px; cursor: pointer; box-shadow: 0 14px 30px -12px rgba(15, 138, 112, 0.7); }
+.vx-start-btn:focus-visible { outline: 3px solid var(--teal-dark); outline-offset: 3px; }
+.vx-start p { margin: 0; color: var(--soft); font-size: 14px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vx-app .vx-orb-ring, .vx-app .vx-wave i { animation: none !important; }
+  .vx-app[data-state="listening"] .vx-orb-ring { opacity: 0.5; transform: scale(1.1); }
+}
+
+.vx-sources { margin: 8px 0 0; font-size: 12.5px; color: var(--faint); }
+.vx-sources[hidden] { display: none; }
+.vx-sources a { color: var(--teal-dark); }
+
+/* today at a glance (real SmartPoli data) + what you can say */
+.vx-dock { display: flex; flex-direction: column; gap: 12px; }
+.vx-today { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.vx-today[hidden] { display: none; }
+.vx-tile {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 12px 11px;
+  display: flex; flex-direction: column; gap: 2px; text-align: left; min-width: 0;
+}
+.vx-tile-label { font-size: 12px; color: var(--faint); font-weight: 600; }
+.vx-tile strong { font-family: 'Figtree', sans-serif; font-size: 17px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vx-tile-sub { font-size: 12.5px; color: var(--soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vx-try { margin: 0; min-height: 22px; font-size: 14px; color: var(--soft); transition: opacity 0.4s ease; }
+.vx-try b { color: var(--teal-dark); font-weight: 600; }
+.vx-try.is-fading { opacity: 0; }
+@media (max-width: 380px) {
+  .vx-tile strong { font-size: 15px; }
+  .vx-today { gap: 7px; }
+}
+@media (prefers-reduced-motion: reduce) { .vx-try { transition: none; } }
+
+/* phones: tile text wraps instead of being cut, and everything fits one screen */
+@media (max-width: 480px) {
+  .vx-tile { padding: 10px 10px 9px; }
+  .vx-tile strong { white-space: normal; font-size: 15px; line-height: 1.25;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .vx-tile-sub { white-space: normal; font-size: 12px; line-height: 1.3; }
+}
+@media (max-height: 780px) {
+  .vx-title { font-size: 26px; }
+  .vx-subline { margin-bottom: 16px; }
+  .vx-orb { width: clamp(140px, 24vh, 190px); height: clamp(140px, 24vh, 190px); }
+  .vx-start { margin-top: 14px; }
+  .vx-stage { padding: 4px 0 12px; }
+}

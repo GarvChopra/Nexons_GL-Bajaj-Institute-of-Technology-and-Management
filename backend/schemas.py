@@ -1,0 +1,221 @@
+"""SmartPoli API request/response schemas (Pydantic). Thin mirrors of db.py's
+canonical ORM model for (de)serialisation only — not a second data shape."""
+
+import base64
+import binascii
+from typing import Literal, Optional
+from pydantic import BaseModel, Field, field_validator
+
+
+class PatientCreate(BaseModel):
+    name: str
+    age: Optional[int] = None
+    sex: Optional[str] = None
+    blood_group: Optional[str] = None
+    allergies: Optional[str] = None
+    emergency_contact: Optional[str] = None
+
+
+class ManualMedicine(BaseModel):
+    """Add one medicine by hand (or after a scan) the way an alarm is set: which medicine, at what times, repeating on
+    which days, for how long. Scheduled straight away - the person has just entered every detail themselves."""
+    patient_id: int
+    name: str = Field(..., min_length=2, max_length=80)
+    strength: Optional[str] = Field(None, max_length=30)
+    form: Literal["tab", "cap", "syrup", "inj"] = "tab"
+    as_needed: bool = False
+    times: list[str] = Field(default_factory=list, max_length=8)          # "HH:MM", e.g. ["08:00", "20:00"]
+    weekdays: Optional[list[int]] = None                                    # None / all seven = every day
+    food: Literal["before", "after", "any"] = "any"
+    duration_days: Optional[int] = Field(None, ge=1, le=365)              # None = ongoing
+
+
+class ShiftMedicine(BaseModel):
+    """Move every upcoming dose of one medicine later by a number of minutes (the 'keep these apart' suggestion)."""
+    minutes: int = Field(..., ge=15, le=720)
+
+
+class PatientEdit(BaseModel):
+    name: Optional[str] = None
+    age: Optional[int] = None
+    sex: Optional[str] = None
+    blood_group: Optional[str] = None
+    allergies: Optional[str] = None
+    emergency_contact: Optional[str] = None
+
+
+class PrescriptionCreate(BaseModel):
+    patient_id: int
+    doctor_name: Optional[str] = None
+    issued_date: Optional[str] = None
+    lines: list[str]  # raw prescription lines — the manual path (always works)
+
+
+class MedicineEdit(BaseModel):
+    name: Optional[str] = None
+    dose_amount: Optional[str] = None
+    dose_unit: Optional[str] = None
+    schedule_code: Optional[str] = None
+    food: Optional[str] = None
+    duration_days: Optional[int] = None
+    ongoing: Optional[bool] = None
+
+
+class SkipDose(BaseModel):
+    reason: str
+
+
+class PrnLog(BaseModel):
+    medicine_id: int
+
+
+class TriageCheckRequest(BaseModel):
+    patient_id: int
+    symptom_ids: list[str]
+    answers: dict[str, bool] = {}
+
+
+class NextQuestionRequest(BaseModel):
+    symptom_id: str
+    answers: dict[str, bool] = {}
+    current_severity: str = "LOW"
+
+
+class ClinicalNoteCreate(BaseModel):
+    note: str
+    # actor is deliberately NOT accepted from the client any more — it is
+    # derived from the authenticated user (auth.get_current_user). See
+    # main.py's add_clinical_note.
+
+
+class FreeTextTriageRequest(BaseModel):
+    text: str
+
+
+# ---------------------------------------------------------------- auth
+
+class RegisterRequest(BaseModel):
+    email: str
+    password: str
+    name: str
+    role: str  # 'patient' | 'caregiver' | 'doctor'
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+# ---------------------------------------------------------------- caregiver/doctor linking
+
+class LinkRedeem(BaseModel):
+    code: str
+
+
+class MedicineCorrectionCreate(BaseModel):
+    field: str          # one of: name, dose_amount, dose_unit, schedule_code, food, duration_days
+    corrected_value: str
+    reason: str
+
+
+class DoctorPrescriptionCreate(BaseModel):
+    lines: list[str]  # same manual-path lines a patient would type — same parser, same gate
+
+
+class PrescriptionTemplateCreate(BaseModel):
+    label: str
+    lines: list[str]
+
+
+# ---------------------------------------------------------------- 3D health card
+
+CARD_SHARE_FIELDS = ("photo", "blood_group", "allergies", "conditions", "medicines",
+                     "emergency_contact", "caregiver", "doctor", "instructions")
+CARD_PHOTO_MAX_BYTES = 200_000
+
+
+class EmergencyProfileUpdate(BaseModel):
+    """Every field optional: only what's sent changes. An empty string
+    clears a text field or removes the photo."""
+    conditions: Optional[str] = Field(None, max_length=500)
+    instructions: Optional[str] = Field(None, max_length=500)
+    photo: Optional[str] = None
+    share: Optional[dict[str, bool]] = None
+
+    @field_validator("photo")
+    @classmethod
+    def _valid_photo(cls, v):
+        if not v:
+            return v
+        prefix, _, payload = v.partition(",")
+        if prefix not in ("data:image/jpeg;base64", "data:image/png;base64"):
+            raise ValueError("Photo must be a JPEG or PNG data URL.")
+        try:
+            raw = base64.b64decode(payload, validate=True)
+        except (binascii.Error, ValueError):
+            raise ValueError("Photo is not valid base64.")
+        if len(raw) > CARD_PHOTO_MAX_BYTES:
+            raise ValueError("Photo is too large (max 200 KB).")
+        return v
+
+    @field_validator("share")
+    @classmethod
+    def _valid_share(cls, v):
+        if v is not None:
+            unknown = set(v) - set(CARD_SHARE_FIELDS)
+            if unknown:
+                raise ValueError(f"Unknown share fields: {sorted(unknown)}")
+        return v
+
+
+# ---------------------------------------------------------------- voice assistant
+
+class VoiceMessage(BaseModel):
+    role: str
+    content: str
+
+
+class VoiceTurnRequest(BaseModel):
+    text: str = Field(..., min_length=1, max_length=1000)
+    lang: Literal["en", "hi"] = "en"
+    client_time: Optional[str] = None   # browser's local time, ISO 8601 with offset
+    history: list[VoiceMessage] = Field(default_factory=list, max_length=40)
+    state: dict = Field(default_factory=dict)
+    recheck: Optional[Literal["better", "same", "worse"]] = None   # a tapped recheck button
+
+
+class PatientSettingsUpdate(BaseModel):
+    timezone: Optional[str] = Field(None, max_length=64)       # IANA name, validated server-side
+    reminder_lead_minutes: Optional[int] = Field(None, ge=0, le=120)
+
+
+class PushKeys(BaseModel):
+    p256dh: str = Field(..., min_length=10, max_length=200)
+    auth: str = Field(..., min_length=10, max_length=100)
+
+
+class PushSubscribeRequest(BaseModel):
+    endpoint: str = Field(..., min_length=10, max_length=2000)
+    keys: PushKeys
+
+
+class PushUnsubscribeRequest(BaseModel):
+    endpoint: str = Field(..., min_length=10, max_length=2000)
+
+
+class RescheduleDose(BaseModel):
+    to: str = Field(..., max_length=40)   # ISO local datetime, e.g. 2026-10-05T14:00:00
+
+
+class RoutineUpdate(BaseModel):
+    morning: str = Field(..., max_length=5)
+    afternoon: str = Field(..., max_length=5)
+    evening: str = Field(..., max_length=5)
+    night: str = Field(..., max_length=5)
+    bedtime: str = Field(..., max_length=5)
+    notify_soon: bool = True
+    notify_followup: bool = True
+
+
+class TakeDose(BaseModel):
+    override: bool = False      # "I already took it" - honoured only for soft warnings (cross-medicine spacing / AI estimates)

@@ -1,0 +1,40 @@
+fastapi==0.111.0
+uvicorn[standard]==0.30.0
+python-multipart==0.0.9
+Pillow==10.4.0
+groq==0.9.0
+openai==1.51.0
+reportlab==4.2.2
+sqlalchemy==2.0.31
+psycopg2-binary==2.9.9
+aiofiles==23.2.1
+httpx==0.27.0
+python-dotenv==1.0.1
+
+# SmartPoli additions — required for the manual path (Features 1-4).
+# None of these need network access or an API key.
+rapidfuzz==3.9.6
+apscheduler==3.10.4
+pytest==8.3.2
+qrcode==7.4.2
+
+# SmartPoli additions — real auth/RBAC + doctor/caregiver dashboards.
+# Also no network access or API key required.
+pyjwt==2.9.0
+bcrypt==4.2.0
+
+# OCR (Feature 1, image-upload path) — the Tesseract engine, which runs
+# everywhere including Render (needs the tesseract-ocr apt package, added
+# in backend/Dockerfile, alongside these). The much larger TrOCR engine
+# (more accurate on handwriting) lives in requirements-ocr.txt instead —
+# see that file for why it's kept separate.
+opencv-python-headless==4.10.0.84
+numpy==1.26.4
+# Digital Twin (demo copy): small CPU-only build, same version that saved the models in twin_models/
+xgboost-cpu==3.4.1
+pytesseract==0.3.13
+
+# Dose-reminder push notifications (Web Push + VAPID) and patient-local time zones.
+# tzdata: slim Docker images and Windows ship no IANA zone database of their own.
+pywebpush==2.5.0
+tzdata==2026.2

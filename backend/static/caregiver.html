@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartPoli — caregiver</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="topbar no-print">
+    <div class="topbar-row">
+      <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navDrawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>SmartPoli</div>
+    </div>
+  </header>
+
+  <div class="nav-drawer-overlay no-print" id="navOverlay"></div>
+  <div class="nav-drawer no-print" id="navDrawer" aria-label="Settings">
+    <div class="nav-drawer-head">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span>SmartPoli</div>
+      <button class="ghost small" id="closeDrawerBtn" aria-label="Close menu">✕</button>
+    </div>
+    <div class="nav-drawer-body">
+      <button class="ghost" id="a11yToggleBtn" title="Larger text and buttons" aria-pressed="false">Aa Larger text</button>
+      <button class="primary" id="linkPatientBtn">+ Link a patient</button>
+      <div class="session-chip" id="sessionChip"></div>
+    </div>
+  </div>
+
+  <div class="body-row">
+    <main class="content" style="max-width:900px;">
+      <h2>Linked patients</h2>
+      <input type="text" id="patientSearchInput" placeholder="Search patients by name..." style="margin-bottom:12px;">
+      <div id="patientPicker" class="patient-picker-grid"></div>
+      <div id="linkForm" style="display:none;" class="card">
+        <h3>Link a patient</h3>
+        <p style="color:var(--ink-soft);font-size:13px;">Ask the patient to generate an invite code from their
+          SmartPoli app (Emergency card tab → Link caregiver), then enter it here.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="linkCodeInput" placeholder="8-character code" style="flex:1 1 160px;min-width:0;text-transform:uppercase;">
+          <button class="primary" id="redeemLinkBtn">Link</button>
+          <button class="ghost" id="cancelLinkBtn">Cancel</button>
+        </div>
+        <div id="linkStatus" style="margin-top:8px;font-size:13px;color:var(--ink-soft);"></div>
+      </div>
+
+      <section id="overview"></section>
+    </main>
+  </div>
+</div>
+
+<script src="/static/auth.js"></script>
+<script src="/static/icons.js"></script>
+<script src="/static/caregiver.js"></script>
+</body>
+</html>
