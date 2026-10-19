@@ -87,7 +87,7 @@ the reasons and the forecast curve, and lets the doctor write a note, mark a pat
 
 ## 6. Demo video
 
-Demo video (at least 20 minutes): `TODO link` (unlisted YouTube, or a recorded PowerPoint).
+Demo video (at least 20 minutes): [https://youtu.be/y60bRA6btbs](https://youtu.be/y60bRA6btbs)
 
 ## 7. Presentation
 
