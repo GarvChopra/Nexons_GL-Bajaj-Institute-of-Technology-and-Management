@@ -91,7 +91,7 @@ Demo video (at least 20 minutes): [https://youtu.be/y60bRA6btbs](https://youtu.b
 
 ## 7. Presentation
 
-Presentation with project details and outcome (PDF/PPT): [Project presentation (Google Slides)](https://docs.google.com/presentation/d/1EiYjviC0lsD76vrJWHhsIlnWj-mDbHXa/edit?usp=sharing`TODO link or file`.ouid=116027556811811501509`TODO link or file`.rtpof=true`TODO link or file`.sd=true)
+Presentation with project details and outcome (PDF/PPT): [Project presentation (Google Slides)](https://docs.google.com/presentation/d/1EiYjviC0lsD76vrJWHhsIlnWj-mDbHXa/edit?usp=sharing&ouid=116027556811811501509&rtpof=true&sd=true)
 
 ## 8. Open-source licence
 
