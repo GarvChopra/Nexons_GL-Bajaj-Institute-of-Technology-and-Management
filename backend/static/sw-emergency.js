@@ -4,7 +4,7 @@
 // (main.py's emergency_card_page). Caches the emergency card the first
 // time it's opened successfully online, so re-opening the same link with
 // no signal still shows something instead of a browser error. Nothing
-// else in SmartPoli is made offline-capable — see the project spec section 11
+// else in SmartPoli is made offline-capable — see CLAUDE.md section 11
 // ("Only make essential emergency information available offline").
 
 const CACHE_NAME = "smartpoli-emergency-v1";

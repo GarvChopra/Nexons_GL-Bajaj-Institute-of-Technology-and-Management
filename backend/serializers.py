@@ -2,7 +2,7 @@
 Shared row->dict serializers and lookups, used by main.py, caregiver_router.py
 and doctor_router.py alike, so the caregiver/doctor dashboards render the
 SAME shape of data the patient app does — no second representation of a
-Medicine, Dose or report (the project spec section 6: "One model.").
+Medicine, Dose or report (CLAUDE.md section 6: "One model.").
 """
 
 import base64

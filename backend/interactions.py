@@ -2,7 +2,7 @@
 SmartPoli — optional Feature D: drug interaction detection.
 
 Not part of the four mandatory PS4 features — this is an addition on top of
-them (the project spec section 4 lists it as optional; the mandatory features must
+them (CLAUDE.md section 4 lists it as optional; the mandatory features must
 never be weakened to make room for it).
 
 Deterministic, table-driven, same philosophy as triage.py: a versioned local

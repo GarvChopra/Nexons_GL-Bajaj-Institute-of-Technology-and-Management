@@ -334,7 +334,7 @@ main.content { flex: 1; padding: 28px 32px; max-width: 800px; margin: 0 auto; mi
 
   /* tables → stacked cards on phone: horizontal scroll is a last resort,
      not the default, for anything wider than two or three short columns
-     (the project spec's own "no cramped tables" instinct, extended to mobile) */
+     (CLAUDE.md's own "no cramped tables" instinct, extended to mobile) */
   table.responsive-table { min-width: 0; }
   table.responsive-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
   table.responsive-table, table.responsive-table tbody, table.responsive-table tr, table.responsive-table td { display: block; width: 100%; }

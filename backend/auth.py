@@ -10,7 +10,7 @@ patient_id comes only from a real relationship row (Patient.user_id for a
 patient, an active CaregiverLink/DoctorLink for anyone else).
 
 Runs with zero external services — no OAuth provider, no email delivery,
-matching the project spec section 14 ("runs with zero API keys").
+matching CLAUDE.md section 14 ("runs with zero API keys").
 """
 
 import os

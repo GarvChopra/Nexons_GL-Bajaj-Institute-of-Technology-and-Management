@@ -1,7 +1,7 @@
 """
 End-to-end tests over the manual path: textarea -> parser -> confirm ->
 dashboard -> triage -> report. This is the path that must work with an
-empty .env (the project spec section 14) — no OCR, no LLM, no network call.
+empty .env (CLAUDE.md section 14) — no OCR, no LLM, no network call.
 """
 import sys
 import os
@@ -136,3 +136,10 @@ def test_prn_medicine_cannot_be_scheduled_via_log_prn_endpoint_mismatch():
         # This medicine is NOT prn — log-prn must refuse it.
         r = client.post(f"/medicines/{medicine_id}/log-prn")
         assert r.status_code == 400
+
+
+def test_pages_answer_head_requests_for_uptime_monitors():
+    from main import PAGES  # uptime monitors send HEAD; it used to return 405
+    client = TestClient(app)
+    for path in PAGES:
+        assert client.head(path).status_code == 200, path

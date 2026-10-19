@@ -6,7 +6,7 @@ and food_warnings.py — into one response, plus one narrow addition: a
 structural dosage sanity check. This module adds no second interaction or
 food-warning engine, and the sanity check never asserts a clinical maximum
 dose for a specific drug (that would be exactly the kind of invented
-medical instruction the project spec section 13 forbids) — it only flags values
+medical instruction CLAUDE.md section 13 forbids) — it only flags values
 that are almost certainly a parsing mistake, for a human to check against
 the original prescription.
 """

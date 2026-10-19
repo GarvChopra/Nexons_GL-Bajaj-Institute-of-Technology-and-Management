@@ -12,7 +12,7 @@ around them.
 
 Runs with zero API keys if Twilio isn't configured: is_configured() is
 False, the router refuses the webhook with a clear 503 instead of crashing
-(same "manual path always works" instinct as ocr_plugin.py — the project spec
+(same "manual path always works" instinct as ocr_plugin.py — CLAUDE.md
 section 5), and every other SmartPoli feature is completely unaffected.
 """
 
@@ -134,7 +134,7 @@ def _groq_reformat_summary(summary: str, medicines: list[tuple]) -> Optional[str
     """Ask Groq to restyle the already-decided summary for easier reading
     on WhatsApp -- layout only. Groq never sees the photo and never decides
     a medicine name, dose, or schedule; those are already fixed by the
-    deterministic parser (the project spec section 5/6: nothing generative ever
+    deterministic parser (CLAUDE.md section 5/6: nothing generative ever
     invents prescription content). Its output is used only when every
     verified medicine's name+dose AND every needs_confirmation line's raw
     OCR text survive byte-for-byte -- the latter matters because OCR text
@@ -501,7 +501,7 @@ def send_whatsapp_message(to_phone: str, body: str) -> bool:
 
 def send_due_dose_reminders(db: Session) -> int:
     """
-    The WhatsApp half of Feature 2's reminders (the project spec section 9) —
+    The WhatsApp half of Feature 2's reminders (CLAUDE.md section 9) —
     parallels main.py's _reminder_sweep_job, which marks doses missed. This
     finds doses due within the next 30 minutes for patients who opted in
     (NOTIFY YES), sends one WhatsApp message per dose, and marks it sent —

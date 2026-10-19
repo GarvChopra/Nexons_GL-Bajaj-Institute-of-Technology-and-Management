@@ -11,7 +11,7 @@ Confidence is computed, never invented:
     schedule_confidence = structural parse score from the shorthand engine
     overall              = min(name_confidence, schedule_confidence)
 
-See the project spec section 8 for the threshold table this file implements.
+See CLAUDE.md section 8 for the threshold table this file implements.
 """
 
 import re

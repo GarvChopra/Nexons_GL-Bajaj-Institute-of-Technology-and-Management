@@ -2,7 +2,7 @@
 SmartPoli — Feature 4: combined Doctor/Caregiver PDF report.
 
 A real, downloadable PDF (ReportLab), not just the browser's Print-to-PDF.
-Structure follows the project spec section 11 exactly: patient/prescription in
+Structure follows CLAUDE.md section 11 exactly: patient/prescription in
 plain language, adherence, missed doses, symptom + triage history, drug
 interactions, food warnings, doctor/caregiver notes, alerts, footer
 disclaimer — colour-coded status, header band, footer disclaimer, written

@@ -2,7 +2,7 @@
 Tests for the rule-based triage engine.
 
 test_answers_never_decrease_severity is the most important test in the
-project (the project spec section 10, rule 1): it walks every possible answer
+project (CLAUDE.md section 10, rule 1): it walks every possible answer
 combination, for every symptom, against every possible starting severity,
 and asserts the result never ranks lower than where it started. A wrong
 triage rule is dangerous, not merely annoying — this is the one place that

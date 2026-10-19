@@ -5,7 +5,7 @@ Deterministic. The severity decision is NEVER LLM-generated — it is a table
 lookup over a versioned JSON ruleset (triage_rules.json). This file only
 knows how to walk that table; it contains no medical judgement of its own.
 
-The four rules that make this safe (the project spec section 10):
+The four rules that make this safe (CLAUDE.md section 10):
   1. Answers escalate only — severity = max(current, rule_result) over an
      ordered enum. A `false` answer is "no new information", never "less
      urgent than we thought". See tests/test_triage.py::test_answers_never_decrease_severity

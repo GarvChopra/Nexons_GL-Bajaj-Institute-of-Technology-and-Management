@@ -148,7 +148,7 @@ def doctor_write_prescription(patient_id: int, body: DoctorPrescriptionCreate,
                                user: User = Depends(require_doctor_role), db: Session = Depends(get_db_session)):
     """A doctor writing a prescription directly, not just correcting one the
     patient already typed in. Goes through the exact same parser and
-    confidence gate as the manual path (the project spec: one parser, one gate,
+    confidence gate as the manual path (CLAUDE.md: one parser, one gate,
     regardless of who typed the line) — a doctor's shorthand can still come
     out needs_confirmation if it's ambiguous. Left as 'draft': the PATIENT
     still confirms it before any doses are scheduled (require_write_access

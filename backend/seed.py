@@ -1,6 +1,6 @@
 """
 SmartPoli demo data — three patient personas, one caregiver and one doctor
-account, so judges never have to fight a signup form (the project spec section 14).
+account, so judges never have to fight a signup form (CLAUDE.md section 14).
 
 Run directly: `python seed.py` (from backend/). Talks to the same DB the
 API uses (SMARTPOLI_DATABASE_URL, defaulting to ./smartpoli.db).

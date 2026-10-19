@@ -55,7 +55,7 @@ class OCRUnavailable(Exception):
     Raised whenever the OCR plugin can't run — model download/load failed,
     no internet, unreadable image, whatever. Callers MUST treat this as
     'fall back to manual entry', never let it crash the app: the manual
-    path is the one guarantee this product makes (the project spec section 5).
+    path is the one guarantee this product makes (CLAUDE.md section 5).
     """
 
 

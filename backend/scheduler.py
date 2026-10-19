@@ -1,7 +1,7 @@
 """
 SmartPoli — Feature 2: medication scheduler, dose state machine, adherence.
 
-Dose rows are generated ONCE at confirmation and never recomputed (the project spec
+Dose rows are generated ONCE at confirmation and never recomputed (CLAUDE.md
 section 6, invariant 1). Adherence is then plain row counting — no date maths
 at render time, no drift.
 
@@ -35,7 +35,7 @@ def generate_doses(medicine: Medicine, start_at: Optional[datetime] = None, skip
     - PRN/SOS medicines generate ZERO dose rows — they are logged manually.
     - STAT medicines generate exactly one dose, right now, not repeated daily.
     - Ongoing (duration_days is None) medicines are scheduled 30 days forward,
-      per the project spec 7.4 — never invent a stop date beyond that window.
+      per CLAUDE.md 7.4 — never invent a stop date beyond that window.
     - skip_past=True drops today's slots that are already behind `start_at`
       (which must then be the patient's LOCAL now). Without it, confirming a
       prescription at 3pm created a pending 8am dose that the sweeper would
@@ -173,7 +173,7 @@ def sweep_missed_doses(db: Session, now: Optional[datetime] = None,
     hold a local time. Idempotent: a dose already missed is not touched.
 
     Runs both reactively (dashboard/report calls) and proactively
-    (main.py's background reminder job, the project spec section 9) — every
+    (main.py's background reminder job, CLAUDE.md section 9) — every
     auto-miss is logged to AuditLog, same as a human-initiated one.
     """
     from db import AuditLog  # local import: avoids a circular import with db.py at module load time
@@ -216,7 +216,7 @@ def sweep_missed(db: Session, now: Optional[datetime] = None) -> int:
 def compute_adherence(doses: list[Dose]) -> dict:
     """
     Pending future doses are EXCLUDED from the denominator — otherwise day 1
-    of a 5-day course reads 20% and looks broken (the project spec section 9).
+    of a 5-day course reads 20% and looks broken (CLAUDE.md section 9).
     """
     taken = sum(1 for d in doses if d.state == "taken")
     missed = sum(1 for d in doses if d.state == "missed")

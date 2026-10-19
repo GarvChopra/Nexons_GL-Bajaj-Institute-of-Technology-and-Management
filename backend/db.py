@@ -3,7 +3,7 @@ SmartPoli canonical data model.
 
 One model. Every stage after extraction (scheduler, adherence, triage, report)
 reads and writes these tables — nothing downstream invents its own shape for
-a medicine, a dose, or a patient. See the project spec section 6.
+a medicine, a dose, or a patient. See CLAUDE.md section 6.
 
 Two invariants enforced elsewhere in the codebase, not here:
   1. Dose rows are generated once at confirmation and never recomputed.

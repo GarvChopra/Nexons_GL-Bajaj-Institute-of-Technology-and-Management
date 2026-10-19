@@ -1,7 +1,7 @@
 """
 SmartPoli — FastAPI app.
 
-Wires together the full journey end to end (the project spec section 5):
+Wires together the full journey end to end (CLAUDE.md section 5):
 
     image  -> OCR plugin  -----\
                                  -> parser -> Medicine[] -> review gate -> confirm -> Dose[] -> dashboard -> report
@@ -12,7 +12,7 @@ Runs with an empty .env: nothing here calls an external API or needs a key.
 The manual path never touches the OCR plugin (backend/ocr_plugin.py) —
 that only loads (and downloads its ~1.3GB model) the first time someone
 actually uploads an image, and any failure there falls back to "use manual
-entry" rather than breaking anything else (the project spec section 5).
+entry" rather than breaking anything else (CLAUDE.md section 5).
 """
 
 import hmac
@@ -26,7 +26,7 @@ from typing import Optional
 
 from dotenv import load_dotenv
 # .env lives at the project root (one level up from backend/), not inside
-# backend/ itself — matches .env.example's location and the project spec section 13.
+# backend/ itself — matches .env.example's location and CLAUDE.md section 13.
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".env"))
 
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -194,7 +194,7 @@ def _page_route(file_name: str):
 
 
 for _path, _file in PAGES.items():
-    app.add_api_route(_path, _page_route(_file), methods=["GET"], include_in_schema=False)
+    app.add_api_route(_path, _page_route(_file), methods=["GET", "HEAD"], include_in_schema=False)
 
 
 @app.get("/static/{name}.html", include_in_schema=False)
@@ -268,7 +268,7 @@ def _in_process_sweep_job():
 
 def _reminder_sweep_job():
     """
-    The proactive half of Feature 2's reminders (the project spec section 9): runs
+    The proactive half of Feature 2's reminders (CLAUDE.md section 9): runs
     on a timer instead of only when a page happens to load. Each tick:
       1. marks doses >2h overdue as missed (judged on each patient's own clock),
          and sends the one-off "missed dose" notification for those;
@@ -429,7 +429,7 @@ def edit_patient(patient_id: int, body: PatientEdit, user: User = Depends(requir
 # create_prescription_from_lines lives in prescription_service.py now —
 # shared with whatsapp_bot.py, so a prescription line typed, photographed,
 # or sent over WhatsApp goes through the exact same parser/confidence path
-# (the project spec section 5/6).
+# (CLAUDE.md section 5/6).
 _create_prescription_from_lines = create_prescription_from_lines
 
 
@@ -691,7 +691,7 @@ async def create_prescription_from_image(
     OCR only turns pixels into text lines; the deterministic parser (already
     the source of truth for the manual path) does everything after that,
     so there is exactly one extraction/confidence/scheduling path regardless
-    of source (the project spec section 5/6).
+    of source (CLAUDE.md section 5/6).
 
     If the OCR plugin can't run at all (model failed to load, bad image),
     this returns a clear 503 telling the caller to use manual entry —
@@ -746,7 +746,7 @@ async def create_prescription_from_image(
 def edit_medicine(medicine_id: int, body: MedicineEdit, user: User = Depends(require_medicine_write_access),
                    db: Session = Depends(get_db_session)):
     """
-    Review & confirm screen (the project spec section 8): a human corrects a
+    Review & confirm screen (CLAUDE.md section 8): a human corrects a
     needs_confirmation medicine. Re-derives the schedule from any corrected
     schedule_code and marks it verified — a human just looked at it.
     """
@@ -1293,7 +1293,7 @@ def patient_calendar_ics(patient_id: int, user: User = Depends(require_patient_r
 def patient_interactions(patient_id: int, user: User = Depends(require_patient_read_access),
                           db: Session = Depends(get_db_session)):
     """
-    Feature D (optional, the project spec section 4) — pairwise-checks the
+    Feature D (optional, CLAUDE.md section 4) — pairwise-checks the
     patient's active medicine names against a local, deterministic
     interaction table. Never a diagnosis or treatment instruction, and
     never blocks scheduling — purely informational.
@@ -1307,7 +1307,7 @@ def patient_interactions(patient_id: int, user: User = Depends(require_patient_r
 @app.get("/patients/{patient_id}/food-warnings")
 def patient_food_warnings(patient_id: int, user: User = Depends(require_patient_read_access),
                            db: Session = Depends(get_db_session)):
-    """Feature E (optional, the project spec section 4) — specific foods/substances
+    """Feature E (optional, CLAUDE.md section 4) — specific foods/substances
     to avoid per active medicine. Distinct from the shorthand engine's
     before/after-meals timing field."""
     get_patient_or_404(db, patient_id)
@@ -1456,7 +1456,7 @@ def voice_turn(patient_id: int, body: VoiceTurnRequest, user: User = Depends(req
 
 # ---------------------------------------------------------------- clinical notes (doctor view)
 #
-# Reuses AuditLog rather than a new model — the project spec/the implementation
+# Reuses AuditLog rather than a new model — CLAUDE.md/the implementation
 # brief both call for exactly one audit trail, not a second table just for
 # notes. A note is simply an audit entry with action='clinical_note' whose
 # actor is the AUTHENTICATED doctor's real identity — never a client-
@@ -1559,7 +1559,7 @@ def patient_report_pdf(patient_id: int, user: User = Depends(require_patient_rea
 # but /emergency/{token} — what the printed QR code actually opens —
 # is DELIBERATELY left with no login requirement. A stranger finding an
 # unconscious patient does not have that patient's password; the whole
-# point of an emergency card is that it works without one (the project spec
+# point of an emergency card is that it works without one (CLAUDE.md
 # section 11, Part 15/16 of the brief). It exposes only name/age/sex/
 # blood group/allergies/emergency contact/current medicines — nothing else
 # from the record.

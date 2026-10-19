@@ -11,7 +11,7 @@ symptom_id/question_id it returns is validated against the real ruleset
 before being trusted, in case the model hallucinates one that doesn't exist.
 
 If GROQ_API_KEY is not set, this feature is simply unavailable — nothing
-else in SmartPoli depends on it (the project spec section 14: runs with zero API
+else in SmartPoli depends on it (CLAUDE.md section 14: runs with zero API
 keys). The manual symptom-picker flow works identically with or without it.
 """
 

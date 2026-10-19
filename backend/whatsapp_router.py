@@ -6,7 +6,7 @@ algorithm (HMAC-SHA1 over the request URL + sorted form params, base64,
 compared to X-Twilio-Signature) using only the stdlib — this is the one
 new integration in the whole codebase that talks to an external service by
 webhook, so it gets its own explicit auth check rather than pulling in the
-`twilio` SDK for one function. See the project spec section 13: input validation
+`twilio` SDK for one function. See CLAUDE.md section 13: input validation
 on every endpoint, and never trust an unauthenticated caller.
 
 Set SMARTPOLI_SKIP_TWILIO_SIGNATURE=1 in .env only for local testing with

@@ -10,7 +10,7 @@ second-guesses the prescription. A nudge is one of:
   - a same-day adherence summary.
 
 Reused, not duplicated: this reads db.Medicine/db.Dose rows the scheduler
-already generated (the project spec invariant 1) — it does not compute or store
+already generated (CLAUDE.md invariant 1) — it does not compute or store
 anything new.
 """
 

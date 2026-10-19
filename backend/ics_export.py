@@ -2,7 +2,7 @@
 SmartPoli — .ics calendar export (Part 8 of the brief).
 
 Turns the EXISTING medication schedule (Dose rows, generated once at
-confirmation — the project spec invariant 1) into a standard iCalendar feed. This
+confirmation — CLAUDE.md invariant 1) into a standard iCalendar feed. This
 is not a second scheduler: it only reads Dose rows that already exist and
 formats them as VEVENTs. A minimal, hand-rolled RFC 5545 writer — the
 format is small enough that a dependency for it isn't worth adding.

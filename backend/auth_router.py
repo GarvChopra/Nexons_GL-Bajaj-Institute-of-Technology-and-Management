@@ -2,7 +2,7 @@
 SmartPoli — account endpoints: register, login, "who am I".
 
 No external identity provider, no email delivery — bcrypt + JWT only, so
-this still runs with an empty .env (the project spec section 14).
+this still runs with an empty .env (CLAUDE.md section 14).
 """
 
 import time

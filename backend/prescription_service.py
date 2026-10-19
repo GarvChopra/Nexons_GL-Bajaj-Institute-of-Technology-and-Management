@@ -3,7 +3,7 @@ Shared prescription-creation logic — the one place raw lines (typed,
 OCR'd, or sent over WhatsApp) turn into Medicine rows. Used by main.py's
 manual and image-upload endpoints AND by whatsapp_bot.py, so there is
 exactly one extraction/confidence path regardless of source
-(the project spec section 5/6) — never a second implementation living inside the
+(CLAUDE.md section 5/6) — never a second implementation living inside the
 WhatsApp integration.
 """
 

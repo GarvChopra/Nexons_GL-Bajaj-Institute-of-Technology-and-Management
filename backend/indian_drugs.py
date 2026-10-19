@@ -6,7 +6,7 @@ Used as the RapidFuzz reference set for name_confidence (see parser.py).
 Manufacturer/company names are deliberately excluded — a fuzzy match against
 a company name (e.g. "Cipla") would be scored as a confident medicine-name
 match even though it names no medicine, which is exactly the kind of wrong
-confidence the project spec's confidence gate exists to prevent.
+confidence CLAUDE.md's confidence gate exists to prevent.
 """
 
 INDIAN_DRUG_NAMES = {
