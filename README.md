@@ -15,7 +15,7 @@ words, and gives the doctor a short list of next steps. It is a risk flag for th
 | College | **GL Bajaj Institute of Technology and Management** |
 | Members | **Garv Chopra, Shashwat Shukla, Vishesh Agrahari** |
 | Live demo | [https://smartpoli-kxzt.onrender.com](https://smartpoli-kxzt.onrender.com) |
-| Code | [github.com/shoyo-shashwat/SmartPoli](https://github.com/shoyo-shashwat/SmartPoli) |
+| Code | [github.com/GarvChopra/Nexons_GL-Bajaj-Institute-of-Technology-and-Management](https://github.com/GarvChopra/Nexons_GL-Bajaj-Institute-of-Technology-and-Management) |
 | Submission folder | `Nexons_GL Bajaj Institute of Technology and Management` (deadline 20 Oct 2026, 7:00 PM IST) |
 
 ## 2. Problem statement and healthcare use case
@@ -91,7 +91,7 @@ Demo video (at least 20 minutes): [https://youtu.be/y60bRA6btbs](https://youtu.b
 
 ## 7. Presentation
 
-Presentation with project details and outcome (PDF/PPT): `TODO link or file`.
+Presentation with project details and outcome (PDF/PPT): [Project presentation (Google Slides)](https://docs.google.com/presentation/d/1EiYjviC0lsD76vrJWHhsIlnWj-mDbHXa/edit?usp=sharing`TODO link or file`.ouid=116027556811811501509`TODO link or file`.rtpof=true`TODO link or file`.sd=true)
 
 ## 8. Open-source licence
 
