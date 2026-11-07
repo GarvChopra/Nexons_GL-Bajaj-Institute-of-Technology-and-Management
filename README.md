@@ -16,7 +16,7 @@ words, and gives the doctor a short list of next steps. It is a risk flag for th
 | Members | **Garv Chopra, Shashwat Shukla, Vishesh Agrahari** |
 | Live demo | [https://smartpoli-kxzt.onrender.com](https://smartpoli-kxzt.onrender.com) |
 | Code | [github.com/GarvChopra/Nexons_GL-Bajaj-Institute-of-Technology-and-Management](https://github.com/GarvChopra/Nexons_GL-Bajaj-Institute-of-Technology-and-Management) |
-| Submission folder | `Nexons_GL Bajaj Institute of Technology and Management` (deadline 20 Oct 2026, 7:00 PM IST) |
+| Submission folder | `Nexons_GL Bajaj Institute of Technology and Management` 
 
 ## 2. Problem statement and healthcare use case
 
