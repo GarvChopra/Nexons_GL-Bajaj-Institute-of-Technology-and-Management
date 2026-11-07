@@ -1,6 +1,6 @@
 # SmartPoli Digital Twin
 
-**Project title:** SmartPoli Digital Twin: a virtual patient for type 2 diabetes. Built for the Happiest Health *Digital Twin Challenge 2026* inside the SmartPoli app.
+**Project title:** SmartPoli Digital Twin: a virtual patient for type 2 diabetes.
 
 For a patient with a continuous glucose sensor, it forecasts sugar for the next 2 hours with a likely range, warns about lows and highs, explains why in plain
 words, and gives the doctor a short list of next steps. It is a risk flag for the doctor. It never diagnoses and never changes a treatment.
